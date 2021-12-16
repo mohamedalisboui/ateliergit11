@@ -1,0 +1,602 @@
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <gtk/gtk.h>
+
+#include "fonction.h"
+#include "callbacks.h"
+#include "interface.h"
+
+#include "support.h"
+
+void
+on_button1_signup_admin_clicked        (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_signup_admin;
+
+
+window_signup_admin=create_signup_admin();
+gtk_widget_show (window_signup_admin);
+
+}  // choisi signup as admin
+
+
+void
+on_button2_signup_admin_clicked        (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget *login,*Pw , *window_login_admin;
+
+char admin [50];
+ user a;
+login = lookup_widget (objet_graphique , "entry1_username");
+Pw= lookup_widget (objet_graphique, "entry2_password");
+strcpy (a.username, gtk_entry_get_text(GTK_ENTRY(login)));
+strcpy (a.password, gtk_entry_get_text(GTK_ENTRY(Pw)));
+ajouter_admin (a , "admin.txt");
+
+
+window_login_admin=create_login_admin();
+gtk_widget_show (window_login_admin);
+
+} // signed up as an admin
+
+
+void
+on_button_suser_clicked                (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget *window_login_suser;
+
+
+window_login_suser=create_login_suser();
+gtk_widget_show (window_login_suser); 
+
+
+} //choisi login en tant que s user
+
+
+void
+on_button_signup_suser_clicked         (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_signup_suser;
+
+window_signup_suser=create_signup_suser();
+gtk_widget_show (window_signup_suser); 
+
+} //choisi signup en tant que s user
+
+
+void
+on_button_admin_clicked                (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_login_admin;
+
+window_login_admin=create_login_admin();
+gtk_widget_show (window_login_admin); 
+
+} //choisi login en tant que admin
+
+
+
+
+void
+on_button7_login_clicked               (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+
+GtkWidget  *username , *pw ,*window_choix_admin;
+int verif;
+ user a;
+username = lookup_widget (objet_graphique , "entry1_username");
+pw= lookup_widget (objet_graphique, "entry3_pw");
+strcpy (a.username , gtk_entry_get_text(GTK_ENTRY(username)));
+strcpy (a.password, gtk_entry_get_text(GTK_ENTRY(pw)));
+verif=verifier_admin (a, "admin.txt");
+
+if (verif==1)
+{
+window_choix_admin=create_choix_admin();
+gtk_widget_show (window_choix_admin); 
+}
+}
+     //login en tant que admin 
+
+
+void
+on_button8_login_clicked              (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+GtkWidget  *username , *pw , *window_dashboard;
+int verif=0;
+
+user u;
+username = lookup_widget (objet_graphique , "login_suser");
+pw= lookup_widget (objet_graphique , "entry6_pw");
+strcpy (u.username , gtk_entry_get_text(GTK_ENTRY(username)));
+strcpy (u.password, gtk_entry_get_text(GTK_ENTRY(pw)));
+verif=verifier_user (u, "user.txt");
+
+
+if (verif==1)
+{
+  window_dashboard =create_dashboard();
+  gtk_widget_show (window_dashboard);
+}
+} 
+// login en tant que s user
+
+
+void
+on_button9_signup_clicked              (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget *login,*Pw , *output ,*window_login_suser;
+ user u;
+
+char user [50];;
+login = lookup_widget (objet_graphique , "entry7_username");
+Pw= lookup_widget (objet_graphique , "entry9_pw");
+strcpy (u.username, gtk_entry_get_text(GTK_ENTRY(login)));
+strcpy (u.password, gtk_entry_get_text(GTK_ENTRY(Pw)));
+ajouter_user (u , "user.txt");
+
+window_login_suser=create_login_suser();
+gtk_widget_show (window_login_suser);
+
+
+} // signed up as a s user
+
+void
+on_button12_supprimer_clicked          (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+GtkWidget  *window_supprimer;
+window_supprimer=create_supprimer();
+gtk_widget_show (window_supprimer); 
+}   // choisi de supprimer a user
+
+
+void
+on_button13_chercher_clicked           (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_chercher;
+window_chercher=create_chercher();
+gtk_widget_show (window_chercher);
+}   //choisi de chercher a user
+
+void
+on_button1_chercher_clicked            (GtkButton       *button,
+                                        gpointer         user_data)
+{
+
+GtkWidget *login,*Pw,*output, *objet_graphique;
+ user u;
+int verif;
+char txt[100]="resultat";
+char txt1[100]="";
+
+login = lookup_widget (objet_graphique , "entry1_chercher_username");
+Pw= lookup_widget (objet_graphique , "entry2_chercher_pw");
+strcpy (u.username, gtk_entry_get_text(GTK_ENTRY(login)));
+strcpy (u.password, gtk_entry_get_text(GTK_ENTRY(Pw)));
+
+ verif=verifier_user (u , "user.txt");
+if (verif==1)
+{
+
+sprintf(txt1,"l'utilisateur existe");
+
+output = lookup_widget(button, "label34_res");
+
+gtk_label_set_text(GTK_LABEL(output),txt1);
+}
+else 
+{
+
+sprintf(txt1,"l'utilisateur n'existe pas");
+
+output = lookup_widget(button, "label34_res");
+
+gtk_label_set_text(GTK_LABEL(output),txt1);
+}
+
+}
+  //entrain de chercher a user
+
+void
+on_button11_modif_clicked             (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_modifier;
+window_modifier=create_modifier();
+gtk_widget_show (window_modifier);
+}   //choisi de modifier a user
+
+
+void
+on_button10_ajouter_clicked            (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+
+{
+GtkWidget  *window_ajouter;
+window_ajouter=create_window_ajouter();
+gtk_widget_show (window_ajouter);
+}   //choisi d'ajouter a user
+
+
+void
+on_button14_ajouter_clicked           (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+     GtkWidget *login,*Pw , *window_login_suser;
+ user u;
+login = lookup_widget (objet_graphique , "entry10_username");
+Pw= lookup_widget (objet_graphique , "entry12_pw");
+strcpy (u.username, gtk_entry_get_text(GTK_ENTRY(login)));
+strcpy (u.password, gtk_entry_get_text(GTK_ENTRY(Pw)));
+ajouter_user (u , "user.txt");   
+}
+///suvegarde des donnees ajouter
+
+
+void
+on_button15_username_clicked           (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_modif_username;
+
+window_modif_username=create_modifier_username();
+gtk_widget_show (window_modif_username);
+}  //modifier un username
+
+
+void
+on_button16_pw_clicked                (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_modif_pw;
+
+window_modif_pw=create_modifier_pw();
+gtk_widget_show (window_modif_pw);
+}   //modifier pw
+
+
+
+
+void
+on_button18_modifier_clicked           (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget *login;
+ user u;
+user m;
+
+login = lookup_widget (objet_graphique , "entry13_id");
+
+strcpy (m.username, gtk_entry_get_text(GTK_ENTRY(login)));
+
+
+modifier_user( u,"user.txt");
+
+
+   //sauvegarde des modification pour le username
+}
+
+
+void
+on_button19_modifier_clicked           (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget *login ,*Pw;
+ user u;
+user m;
+
+login = lookup_widget (objet_graphique , "entry15_id");
+Pw= lookup_widget (objet_graphique , "entry16_pw");
+
+strcpy (m.username, gtk_entry_get_text(GTK_ENTRY(login)));
+strcpy (m.password, gtk_entry_get_text(GTK_ENTRY(Pw)));
+
+modifier_pw ( u , "user.txt");
+  //sauvegarde des modification pour le password
+}
+
+
+
+
+
+void
+on_button21_supprimer_clicked          (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+GtkWidget *login,*Pw;
+ user u;
+
+login = lookup_widget (objet_graphique , "entry20_id");
+Pw= lookup_widget (objet_graphique , "entry_supprimer_pw");
+strcpy (u.username, gtk_entry_get_text(GTK_ENTRY(login)));
+strcpy (u.password, gtk_entry_get_text(GTK_ENTRY(Pw)));
+ 
+supprimer(u, "user.txt");
+
+}
+ //suppression d'utilisateur
+
+
+
+void
+on_button22_id_clicked                 (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_button23_username_clicked           (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+}
+
+
+
+
+void
+on_checkbutton4_agent2_clicked         (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_checkbutton3_nut_clicked            (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_checkbutton1_agent_clicked          (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_checkbutton2_technicien_clicked     (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{
+
+}
+
+
+void
+on_button1_role_clicked                (GtkWidget       *objet_graphique,
+                                        gpointer         user_data)
+{ 
+GtkWidget  *window_role;
+
+window_role=create_role();
+gtk_widget_show (window_role);
+}
+
+
+void
+on_button_afficher_clicked             (GtkWidget       *objet,
+                                        gpointer         user_data)
+{
+GtkWidget *window_ajouter;
+GtkWidget *window_afficher;
+GtkWidget     *treeview1;
+
+window_ajouter=lookup_widget(objet,"window_ajouter");
+
+
+window_afficher=lookup_widget(objet,"window_afficher");
+window_afficher=create_window_afficher();
+
+gtk_widget_show (window_afficher);
+
+treeview1=lookup_widget(window_afficher,"treeview1");
+afficher_users(treeview1);
+
+
+
+}
+
+
+void
+on_button_pred_clicked                 (GtkButton       *button,
+                                        gpointer         user_data)
+{
+GtkWidget *window_choix_admin;
+
+window_choix_admin=create_choix_admin();
+gtk_widget_show (window_choix_admin);
+
+}
+
+
+void
+on_button3_afficher_clicked            (GtkWidget       *objet,
+                                        gpointer         user_data)
+{
+GtkWidget *window_afficher;
+GtkTreeView     *treeview1;
+afficher_users(treeview1);
+window_afficher=create_window_afficher();
+gtk_widget_show (window_afficher);
+}
+
+
+void
+on_button5_afficher_clicked            (GtkWidget       *objet,
+                                        gpointer         user_data)
+{
+GtkWidget *window_afficher;
+GtkTreeView     *treeview1;
+afficher_users(treeview1);
+window_afficher = create_window_afficher();
+  gtk_widget_show (window_afficher);
+}
+
+
+void
+on_button6_retour_clicked              (GtkButton       *button,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_modifier;
+window_modifier=create_modifier();
+gtk_widget_show (window_modifier);
+}
+
+
+
+void
+on_treeview1_row_activated             (GtkTreeView     *treeview1,
+                                        GtkTreePath     *path,
+                                        GtkTreeViewColumn *column,
+                                        gpointer         user_data)
+{
+GtkTreeIter iter;
+gchar* username;
+gchar* password;
+user u;
+
+GtkTreeModel *model = gtk_tree_view_get_model(treeview1);
+if (gtk_tree_model_get_iter(model, &iter, path))
+
+{
+gtk_tree_model_get (GTK_LIST_STORE(model), &iter, 0, &username,1, &password, -1);
+strcpy(u.username,username);
+strcpy(u.password,password);
+supprimer(u,"user.txt");
+afficher_users(treeview1);
+}
+
+}
+
+
+void
+on_button1_confirmer_clicked           (GtkButton       *button,
+                                        gpointer         user_data)
+{
+
+}
+
+
+
+void
+on_button_affichage_clicked            (GtkWidget       *objet,
+                                        gpointer         user_data)
+{
+GtkWidget *window_afficher, *treeview;
+window_afficher=lookup_widget(objet,"window_afficher");
+treeview=lookup_widget(window_afficher,"treeview1");
+afficher_users(treeview);
+
+}
+
+
+void
+on_button1_retour_clicked              (GtkButton       *button,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_ajouter;
+window_ajouter=create_window_ajouter();
+gtk_widget_show (window_ajouter);
+}
+
+
+void
+on_button4_retour_clicked              (GtkButton       *button,
+                                        gpointer         user_data)
+{
+GtkWidget  *window_modifier;
+
+window_modifier=create_modifier();
+gtk_widget_show (window_modifier);
+}
+
+
+int x;
+void
+on_radiobutton1_toggled                (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+if (gtk_toggle_button_get_active(GTK_RADIO_BUTTON(togglebutton)))
+{x=1;}
+}
+
+
+void
+on_radiobutton2_toggled                (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+if (gtk_toggle_button_get_active(GTK_RADIO_BUTTON(togglebutton)))
+{x=2;}
+}
+
+
+void
+on_radiobutton3_toggled                (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+if (gtk_toggle_button_get_active(GTK_RADIO_BUTTON(togglebutton)))
+{x=3;}
+}
+
+
+void
+on_radiobutton4_toggled                (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+if (gtk_toggle_button_get_active(GTK_RADIO_BUTTON(togglebutton)))
+{x=4;}
+}
+
+
+void
+on_button1_suivant_clicked             (GtkButton       *button,
+                                        gpointer         user_data)
+{
+
+GtkWidget* output;
+char txt[100]="role";
+char txt1[100]="";
+if(x==1)
+strcpy(txt,"Agent de foyer");
+else
+if(x==2)
+strcpy(txt,"Technicien");
+else
+if(x==3)
+strcpy(txt,"Nutritionniste");
+else
+if(x==4)
+strcpy(txt,"Agent de restaurant");
+
+sprintf(txt1,"Votre role est :\n     %s.",txt);
+
+output = lookup_widget(button, "label_role");
+
+gtk_label_set_text(GTK_LABEL(output),txt1);
+}
+
+
+
+
